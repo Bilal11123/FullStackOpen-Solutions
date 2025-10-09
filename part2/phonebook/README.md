@@ -1,11 +1,12 @@
 # Phonebook App
 
 A simple React application for managing a phonebook.  
-You can add new contacts permanently to database, filter them by name, and view all saved entries.
+You can add new contacts, update contacts, filter them by name, and view all saved entries.
 
 ## 📦 Features
 - Get contacts from JSON database
 - Add new contacts with name and phone number
+- Update a contact with new phone number
 - Prevent adding duplicate names
 - Filter contacts by name
 - Modular component structure (`Filter`, `PersonForm`, `Persons`)
