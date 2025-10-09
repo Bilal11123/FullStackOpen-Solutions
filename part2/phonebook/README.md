@@ -1,9 +1,10 @@
 # Phonebook App
 
 A simple React application for managing a phonebook.  
-You can add new contacts, filter them by name, and view all saved entries.
+You can add new contacts permanently to database, filter them by name, and view all saved entries.
 
 ## 📦 Features
+- Get contacts from JSON database
 - Add new contacts with name and phone number
 - Prevent adding duplicate names
 - Filter contacts by name
@@ -26,18 +27,14 @@ cd FullStackOpen-Solutions/part2/phonebook
 
    ```bash
    npm install
+   npm install axios
    ```
 
 3. Run the development server:
 
    ```bash
    npm run dev
-   ```
-
-   or (for CRA):
-
-   ```bash
-   npm start
+   npm run server
    ```
 
 4. Open your browser and navigate to:
@@ -52,6 +49,7 @@ cd FullStackOpen-Solutions/part2/phonebook
 
 ## 🧩 Project Structure
 ```css
+db.json
 src/
   components/
     Filter.jsx
