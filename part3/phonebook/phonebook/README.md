@@ -22,7 +22,7 @@ You can add new contacts, update contacts, filter them by name, and view all sav
 1. Clone the repository
 ```bash
 git clone https://github.com//Bilal11123/FullStackOpen-Solutions.git
-cd FullStackOpen-Solutions/part2/phonebook
+cd FullStackOpen-Solutions/part3/phonebook/phonebook
 ```
 2. Install dependencies:
 
