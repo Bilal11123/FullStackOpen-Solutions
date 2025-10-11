@@ -18,6 +18,6 @@ const update = (id, updatedPerson) => {
 }
 
 const getInfo = () => {
-  return axios.get(`${baseUrl}/info`).then(response => response.data)
+  return axios.get(`/info`).then(response => response.data)
 }
 export default { getAll, create, deletePerson, update, getInfo }
