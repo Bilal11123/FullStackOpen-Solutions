@@ -1,20 +1,7 @@
-# Full Stack Open 2025 - Part 3: Phonebook Backend (Task 3.11)
+# Full Stack Open 2025 - Part 3: Phonebook Backend
 
 This project is part of the **Full Stack Open** course by the University of Helsinki.  
-It covers **Part 3 – Programming a server with Node.js and Express**, specifically **Task 3.11**, which involves deploying the backend to the internet.
-
-## 📖 Task Description
-
-**3.11: Phonebook full stack**  
-The goal of this exercise is to **deploy** the backend of the Phonebook application to an online service such as **Render** or **Fly.io**, and verify that it works with a web browser.
-
-You should have:
-- An Express server handling API routes for the phonebook.
-- MongoDB as the database.
-- The app deployed to the internet (with a public URL).
-- A functional `/info` endpoint and working CRUD routes for phonebook entries.
-
----
+It covers **Part 3 – Programming a server with Node.js and Express**
 
 ## 🚀 Live Application
 
