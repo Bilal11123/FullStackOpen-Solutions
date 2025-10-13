@@ -1,0 +1,21 @@
+{
+  "name": "blog-backend",
+  "version": "0.0.1",
+  "description": "",
+  "license": "ISC",
+  "author": "Muhammad Bilal",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test",
+    "dev": "node --watch index.js",    
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1"
+  }
+}
