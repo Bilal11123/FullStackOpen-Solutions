@@ -45,7 +45,22 @@ const App = () => {
       number: newNumber,
     }
     personServices.create(newPerson).then(returnedPerson => {
+      // if (returnedPerson.error) {
+      //   setNotification(returnedPerson.error)
+      //   setIsError(true)
+      //   setTimeout(() => {
+      //     setNotification(null)
+      //   }, 5000)
+      //   return
+      // }
       setPersons([...persons, returnedPerson])
+    }).catch(error => {
+      setNotification(error.response.data.error)
+      setIsError(true)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+      return
     })
     setNotification(`Added ${newName}`)
     setIsError(false)

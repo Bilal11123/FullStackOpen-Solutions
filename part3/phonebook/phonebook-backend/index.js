@@ -13,33 +13,6 @@ morgan.token('body', (req) => {
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-// let persons = [
-//     { 
-//         "id": "1",
-//         "name": "Arto Hellas", 
-//         "number": "040-123456"
-//     },
-//     { 
-//         "id": "2",
-//         "name": "Ada Lovelace", 
-//         "number": "39-44-5323523"
-//     },
-//     { 
-//         "id": "3",
-//         "name": "Dan Abramov", 
-//         "number": "12-43-234345"
-//     },
-//     { 
-//         "id": "4",
-//         "name": "Mary Poppendieck", 
-//         "number": "39-23-6423122"
-//     }
-// ]
-
-// app.get('/', (req, res) => {
-//     res.send('<h1>Hello World!</h1>')
-// })
-
 app.get('/info', (req, res) => {
     const date = new Date()
     Person.find({}).then(persons => {
@@ -66,40 +39,44 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    Person.findByIdAndDelete(id).then(result => {
+    Person.findByIdAndDelete(id).then(() => {
         response.status(204).end()
     })
-    .catch(error => {
-        console.log(error)
-        response.status(400).send({ error: 'malformatted id' })
-    })
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
 })
 
-const generateId = () => {
-    const Id = Math.floor(Math.random() * 9999999)
-    return String(Id)
-}
+// const generateId = () => {
+//     const Id = Math.floor(Math.random() * 9999999)
+//     return String(Id)
+// }
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
     if (!body || !body.name || !body.number) {
         return response.status(400).json({ error: 'Content is missing' })
     }
-    
+
     const person = new Person({
         name: body.name,
         number: body.number,
     })
     person.save().then(savedPerson => {
         response.json(savedPerson)
+    }).catch(error => {
+        // console.log(error)
+        next(error)
+        // response.json({ error: error.message })
     })
-        //
-        // persons = persons.concat(person)
-        // response.status(201).json(person)
-    
+    //
+    // persons = persons.concat(person)
+    // response.status(201).json(person)
+
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
     const body = request.body
 
@@ -131,6 +108,6 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
-app.listen(PORT, () =>{
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })

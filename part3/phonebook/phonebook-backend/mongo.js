@@ -1,9 +1,9 @@
-const e = require('cors')
+require('cors')
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
-  console.log('give password as argument')
-  process.exit(1)
+    console.log('give password as argument')
+    process.exit(1)
 }
 
 const password = process.argv[2]
@@ -37,12 +37,12 @@ else if (process.argv.length === 5) {
         number: number,
     })
 
-    person.save().then(result => {
-    console.log('person saved!')
-    mongoose.connection.close()
-})
+    person.save().then(() => {
+        console.log('person saved!')
+        mongoose.connection.close()
+    })
 } else {
     console.log('invalid number of arguments')
     mongoose.connection.close()
-    process.exit(1)    
+    process.exit(1)
 }
