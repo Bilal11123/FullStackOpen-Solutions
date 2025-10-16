@@ -19,6 +19,8 @@ Includes helper functions and unit tests for analyzing blog data.
   - `favoriteBlog`
   - `mostBlogs`
   - `mostLikes`
+- integration tests for updating, deleting, and other functions for blogs
+  - `blog_api.test.js`
 
 ## Setup
 1. Installation
@@ -52,6 +54,9 @@ npm test
 ├── controllers/
 ├── models/
 ├── tests/
+│   └── test_helper.js
+│   └── blog_api.test.js
+│   ....
 ├── utils/
 │   └── list_helper.js
 ├── app.js
