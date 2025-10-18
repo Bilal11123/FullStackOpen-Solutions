@@ -1,9 +1,13 @@
 const blogRoutes = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware')
+const jwt = require('jsonwebtoken')
 
 blogRoutes.get('/', async (request, response, next) => {
     try {
-        const blogs = await Blog.find({})
+        const blogs = await Blog
+            .find({}).populate('user', { username: 1, name: 1 })
         response.json(blogs)
     } catch (error) {
         next(error)
@@ -11,26 +15,41 @@ blogRoutes.get('/', async (request, response, next) => {
     
 })
 
-blogRoutes.post('/', async (request, response, next) => {
+blogRoutes.post('/', userExtractor, async (request, response, next) => {
     const body = request.body
+    const user = request.user
+
+    if (!user) {
+        return response.status(400).json({ error: 'userId missing or not valid' })
+    }
 
     const blog = new Blog({
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes
+        likes: body.likes,
+        user: user._id
     })
     try {
         const result = await blog.save()
+        user.blogs = user.blogs.concat(result._id)
+        await user.save()
         response.status(201).json(result)
     } catch (error) {
         next(error)
-    }
-    
+    }    
 })
 
-blogRoutes.delete('/:id', async (request, response, next) => {
+blogRoutes.delete('/:id', userExtractor, async (request, response, next) => {
     try {
+        const user = request.user
+        const blog = await Blog.findById(request.params.id)
+        if (!blog) {
+            return response.status(401).json({ error: 'invalid blog id' })
+        }
+        if ( !(blog.user.toString() === user.id.toString()) ){
+            return response.status(401).json({ error: 'invalid user' })
+        }
         await Blog.findByIdAndDelete(request.params.id)
         response.status(204).end()
     } catch (error) {
