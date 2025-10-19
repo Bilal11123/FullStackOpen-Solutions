@@ -56,7 +56,7 @@ Supports **JWT-based authentication**, **route protection**, and **comprehensive
 ### 1️⃣ Clone & Install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com//Bilal11123/FullStackOpen-Solutions.git
 cd part4/blog-backend
 npm install
 ```

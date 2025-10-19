@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 
 const App = () => {
+  const [formVisible, setFormVisible] = useState(false)
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState('')
   const [isError, setIsError] = useState(false)
   const [username, setUsername] = useState('') 
@@ -18,8 +17,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
+    )
   }, [])
 
   useEffect(() => {
@@ -64,32 +63,57 @@ const App = () => {
       // }, 5000)
   }
 
-  const addBlog = event => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const addBlog = (blogObject) => {
     blogService.create(blogObject).then(returnedBlog => {
       setBlogs(blogs.concat(returnedBlog))
-      setAuthor('')
-      setTitle('')
-      setUrl('')
     })
-    if(!title && !url && !author){
+    if(!blogObject.title || !blogObject.url || !blogObject.author){
       setNotification('Blog Values missing')
       setIsError(true)
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } else {
-      setNotification(`a new blog ${title} by ${author} added`)
+      setNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`)
       setIsError(false)
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     }
+  }
+
+  const updateBlog = (id, blogObject) => {
+    blogService.update(id, blogObject).then(returnedBlog => {
+      const newBlogs = blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog)
+      const sortedBlogs = newBlogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs)
+    })
+  }
+
+  const deleteBlog = (id) => {
+    blogService.deleteBlog(id).then(() => {
+      const newBlogs = blogs.filter(blog => blog.id !== id)
+      const sortedBlogs = newBlogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs)
+    })
+  }
+
+  const blogForm = () => {
+    const hideWhenVisible = { display: formVisible ? 'none' : '' }
+    const showWhenVisible = { display: formVisible ? '' : 'none' }
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setFormVisible(true)}>Create New Blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm 
+          createBlog={addBlog}
+          />
+          <button onClick={() => setFormVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
   }
 
   const loginForm = () => (
@@ -136,44 +160,14 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>Logout</button>
       </div>
-      <h2>Create New</h2>
-      <div>
-        <form onSubmit={addBlog}>
-          <div>
-            <label>
-              title
-              <input
-                type="text"
-                value={title}
-                onChange={({ target }) => setTitle(target.value)}
-                />
-            </label>
-          </div>
-          <div>
-              <label>
-              author
-              <input
-                type="text"
-                value={author}
-                onChange={({ target }) => setAuthor(target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              url
-              <input
-                type="text"
-                value={url}
-                onChange={({ target }) => setUrl(target.value)}
-              />
-            </label>
-          </div>          
-          <button type="submit">create</button>
-      </form>
-      </div>
+      {blogForm()}      
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} 
+        blog={blog} 
+        addLikes={updateBlog} 
+        removeBlog={deleteBlog}
+        userName={user.name}
+        />
       )}
     </div>
   )

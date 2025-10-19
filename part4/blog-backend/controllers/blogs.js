@@ -58,20 +58,41 @@ blogRoutes.delete('/:id', userExtractor, async (request, response, next) => {
     }    
 })
 
+// blogRoutes.put('/:id', async (request, response, next) => {
+//     const { title, author, url, likes, user } = request.body
+//     try {
+//         const blog = await Blog.findById(request.params.id)
+//         if(!blog) return response.status(404).end();
+//         blog.title = title
+//         blog.author = author
+//         blog.url = url
+//         blog.likes = likes
+//         blog.user = user
+//         const updatedBlog = await blog.save()
+//         response.json(updatedBlog)
+//     } catch (error) {
+//         next(error)
+//     }    
+// })
+
 blogRoutes.put('/:id', async (request, response, next) => {
     const { title, author, url, likes } = request.body
+    const updateData = { title, author, url, likes }
+
     try {
-        const blog = await Blog.findById(request.params.id)
-        if(!blog) return response.status(404).end();
-        blog.title = title
-        blog.author = author
-        blog.url = url
-        blog.likes = likes
-        const updatedBlog = await blog.save()
+        const updatedBlog = await Blog.findByIdAndUpdate(
+        request.params.id,
+        updateData,
+        { new: true, runValidators: true }
+        ).populate('user', { username: 1, name: 1 })
+
+        if (!updatedBlog) return response.status(404).end()
         response.json(updatedBlog)
     } catch (error) {
         next(error)
-    }    
+    }
 })
+
+
 
 module.exports = blogRoutes
