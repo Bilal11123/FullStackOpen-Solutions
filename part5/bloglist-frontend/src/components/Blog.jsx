@@ -34,7 +34,7 @@ const Blog = ({ blog, addLikes, removeBlog, userName }) => {
     )
     if (!display){
         return (
-            <div style={blogStyle}>
+            <div className="blog" style={blogStyle}>
                 <div>
                     {blog.title} {blog.author}
                     <button onClick={() => setDisplay(true)}>view</button>
@@ -43,7 +43,7 @@ const Blog = ({ blog, addLikes, removeBlog, userName }) => {
         )
     }
     return (
-        <div style={blogStyle}>
+        <div className="blog" style={blogStyle}>
             <div>
                 {blog.title} {blog.author}
                 <button onClick={() => setDisplay(false)}>hide</button>
