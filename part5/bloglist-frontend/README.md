@@ -4,6 +4,7 @@
 
 This project is part of the **Full Stack Open** course, Part 5: *Testing React Apps*.  
 It builds the frontend for a blog list application and integrates with a backend for managing blogs.
+Add tests for App components.
 
 ### Running the App
 
@@ -13,21 +14,21 @@ It builds the frontend for a blog list application and integrates with a backend
 ````
 
 2. Navigate into the project directory
-
 ```bash
    cd bloglist-frontend
 ```
 3. Install dependencies
-
 ```bash
    npm install
 ```
 4. Start the development server
-
 ```bash
-   npm start
+   npm run dev
 ```
-
+5. Run tests
+```bash
+   npm test
+```
 ### Technologies Used
 
 * React
