@@ -19,4 +19,6 @@ part4
   blog-backend
 part5
   bloglist-frontend
+  blog-backend
+  bloglist-frontend-test
 </pre>
