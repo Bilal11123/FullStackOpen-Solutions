@@ -1,5 +1,6 @@
 import { voteOn } from '../reducers/anecdoteReducer'
-import { useSelector, useDispatch } from 'react-redux' 
+import { useSelector, useDispatch } from 'react-redux'
+import { notificationChange } from '../reducers/notificationReducer'
 
 const Anecdote = ({ anecdote, handleClick }) => {
     return (
@@ -21,13 +22,18 @@ const AnecdoteList = () => {
         }
         return state.anecdotes.filter(a => a.content.includes(state.filter))
     })
+    const addVote = (anecdote) => {
+        dispatch(voteOn(anecdote.id))
+        dispatch(notificationChange(`You voted: '${anecdote.content}'`))
+    }
+    
     return (
         <div>
             {anecdotes.map(anecdote => (
                 <Anecdote
                 key={anecdote.id}
                 anecdote={anecdote}
-                handleClick={() => dispatch(voteOn(anecdote.id))}
+                handleClick={() => addVote(anecdote)}
                 />
             ))}
         </div>

@@ -21,4 +21,7 @@ part5
   bloglist-frontend
   blog-backend
   bloglist-frontend-test
+part6
+  redux-anecdotes
+  unicafe-redux
 </pre>
