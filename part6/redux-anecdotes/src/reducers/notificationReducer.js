@@ -16,12 +16,12 @@ const notificationSlice = createSlice({
 export const { setNotification, clearNotification } = notificationSlice.actions
 
 // Thunk-like function for timed notifications
-export const notificationChange = (message) => {
+export const notificationChange = (message, seconds = 5) => {
     return (dispatch) => {
         dispatch(setNotification(message))
         setTimeout(() => {
             dispatch(clearNotification())
-        }, 5000)
+        }, seconds * 1000)
     }
 }
 
