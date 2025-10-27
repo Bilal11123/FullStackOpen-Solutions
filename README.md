@@ -22,6 +22,7 @@ part5
   blog-backend
   bloglist-frontend-test
 part6
+  query-anecdotes
   redux-anecdotes
   unicafe-redux
 </pre>
