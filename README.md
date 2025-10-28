@@ -25,6 +25,7 @@ part6
   query-anecdotes
   redux-anecdotes
   unicafe-redux
-par7
+part7
   routed-anecdotes
+  country-hook
 </pre>

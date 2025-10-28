@@ -1,7 +1,9 @@
 ## Solutions of part 7 exercises to this folder
-1. Ex 6.0 - 6.3: routed-anecdotes
+1. Ex 7.0 - 7.6: routed-anecdotes
+2. Ex 7.7: country-hook
 
 ## Directories
 <pre>
 routed-anecdotes
+country-hook
 </pre>
