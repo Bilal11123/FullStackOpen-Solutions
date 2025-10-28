@@ -25,4 +25,6 @@ part6
   query-anecdotes
   redux-anecdotes
   unicafe-redux
+par7
+  routed-anecdotes
 </pre>
