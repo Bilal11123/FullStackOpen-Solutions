@@ -29,4 +29,7 @@ part7
   routed-anecdotes
   country-hook
   ultimate-hooks
+  BlogList App
+    blog-backend
+    bloglist-frontend
 </pre>
