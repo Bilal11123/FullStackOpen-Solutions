@@ -1,12 +1,15 @@
 const blogRoutes = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const { userExtractor } = require('../utils/middleware')
 const jwt = require('jsonwebtoken')
 
 blogRoutes.get('/', async (request, response, next) => {
     try {
-        const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+        const blogs = await Blog.find({})
+            .populate('user', { username: 1, name: 1 })
+            .populate('comments', { content: 1 }) // <-- populate comments here
         response.json(blogs)
     } catch (error) {
         next(error)
@@ -88,6 +91,35 @@ blogRoutes.put('/:id', async (request, response, next) => {
         if (!updatedBlog) return response.status(404).end()
         response.json(updatedBlog)
     } catch (error) {
+        next(error)
+    }
+})
+
+blogRoutes.post('/:id/comment', async (request, response, next) => {
+    const body = request.body
+    const id = request.params.id
+
+    console.log('Incoming id:', request.params.id, request.params.id.length)
+    console.log(request.body)
+
+    try {
+        const blog = await Blog.findById(id)
+        console.log(blog)
+        response.status(200)
+
+        const comment = new Comment({content: body.content})
+        const result = await comment.save()
+        
+        blog.comments = blog.comments.concat(result._id)
+        const newBlog = await blog.save()
+        
+        const populatedBlog = await newBlog.populate([
+            { path: 'user', select: 'username name' },
+            { path: 'comments', select: 'content' }
+        ]);
+        response.status(201).json(populatedBlog)
+    } catch (error) {
+        console.log(error)
         next(error)
     }
 })

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
@@ -7,18 +8,24 @@ import loginService from './services/login'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { notificationChange } from './reducers/notificationReducer'
-import { initializeBlogs, appendBlog, addLikesOnBlog , deleteTheBlog } from './reducers/blogReducer'
-import { initializeUser, setUser, clearUser } from './reducers/userReucer'
+import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUser, setUser } from './reducers/userReducer'
+
+import { Routes, Route, Link, useMatch, useNavigate } from 'react-router-dom'
+import Menu from './components/Menu'
+
+import UserList from './components/UserList'
+import userService from './services/users'
+import User from './components/User'
 
 const App = () => {
     const dispatch = useDispatch()
-
-    const [formVisible, setFormVisible] = useState(false)
     const blogs = useSelector(state => state.blogs)
     
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const user = useSelector(state => state.user)
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(initializeBlogs())
@@ -27,6 +34,13 @@ const App = () => {
     useEffect(() => {
         dispatch(initializeUser())
     }, [dispatch])
+
+    const [users, setUsers] = useState([])
+    useEffect(() => {
+        userService.getAll().then(response =>
+            setUsers(response)
+        )
+    }, [])
 
     const handleLogin = async event => {
         event.preventDefault()
@@ -38,54 +52,12 @@ const App = () => {
             dispatch(setUser(newUser))
             setUsername('')
             setPassword('')
+            navigate('/')
         } catch (error) {
             console.log(error)
             dispatch(notificationChange('Wrong username or password', true, 5))
         }
         // console.log('logging in with', username, password)
-    }
-
-    const handleLogout = () => {
-        dispatch(clearUser())
-        window.localStorage.removeItem('loggedBlogappUser')
-        // setNotification('User Logged Out')
-        // setIsError(false)
-        // setTimeout(() => {
-        //   setNotification(null)
-        // }, 5000)
-    }
-
-    const addBlog = blogObject => {
-        dispatch(appendBlog(blogObject))
-        if (!blogObject.title || !blogObject.url || !blogObject.author) {
-            dispatch(notificationChange('Blog Values missing', true, 5))
-        } else {
-            dispatch(notificationChange(`a new blog ${blogObject.title} by ${blogObject.author} added`, false, 5))
-        }
-    }
-
-    const updateBlog = (id, blogObject) => {
-        dispatch(addLikesOnBlog(id, blogObject))
-    }
-
-    const deleteBlog = id => {
-        dispatch(deleteTheBlog(id))
-    }
-
-    const blogForm = () => {
-        const hideWhenVisible = { display: formVisible ? 'none' : '' }
-        const showWhenVisible = { display: formVisible ? '' : 'none' }
-        return (
-            <div>
-                <div style={hideWhenVisible}>
-                    <button onClick={() => setFormVisible(true)}>Create New Blog</button>
-                </div>
-                <div style={showWhenVisible}>
-                    <BlogForm createBlog={addBlog} />
-                    <button onClick={() => setFormVisible(false)}>cancel</button>
-                </div>
-            </div>
-        )
     }
 
     const loginForm = () => (
@@ -114,36 +86,38 @@ const App = () => {
         </form>
     )
 
+    const blogMatch = useMatch('/blogs/:id')
+    const blogFound = blogMatch
+    ? blogs.find(blog => blog.id === blogMatch.params.id)
+    : null
+
+    const userMatch = useMatch('/users/:id')
+    const userFound = userMatch
+    ? users.find(user => user.id === userMatch.params.id)
+    : null
+
     if (user === null) {
         return (
             <div>
                 <h2>Log in to application</h2>
                 <Notification />
-                {/* {notification.notification && <Notification />} */}
                 {loginForm()}
             </div>
         )
-    }
+    }    
 
     return (
         <div>
-            <h1>Blogs</h1>
+            <Menu />
+            <h1>Blog app</h1>
             <Notification />
-            {/* {notification.notification && <Notification />} */}
-            <div>
-                {user.name} logged in
-                <button onClick={handleLogout}>Logout</button>
-            </div>
-            {blogForm()}
-            {blogs.map(blog => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    addLikes={updateBlog}
-                    removeBlog={deleteBlog}
-                    userName={user.name}
-                />
-            ))}
+            <Routes>
+                <Route path="/create" element={<BlogForm />} />
+                <Route path="/" element={<BlogList />} />
+                <Route path="/blogs/:id" element={<Blog blog={blogFound} />} />
+                <Route path="/users" element={<UserList users={users}/>} />
+                <Route path="/users/:id" element={<User user={userFound} />} />
+            </Routes>
         </div>
     )
 }

@@ -1,16 +1,26 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { appendBlog } from '../reducers/blogReducer'
+import { notificationChange } from '../reducers/notificationReducer'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
+    const dispatch = useDispatch()
+
     const addBlog = event => {
         event.preventDefault()
-        createBlog({
+        dispatch(appendBlog({
             title: title,
             author: author,
-            url: url,
-        })
+            url: url
+        }))
+        if (!title || !url || !author) {
+            dispatch(notificationChange('Blog Values missing', true, 5))
+        } else {
+            dispatch(notificationChange(`a new blog ${title} by ${author} added`, false, 5))
+        }
         setAuthor('')
         setTitle('')
         setUrl('')
