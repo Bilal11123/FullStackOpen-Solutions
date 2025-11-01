@@ -1,22 +1,45 @@
-import userService from "../services/users"
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Typography
+} from '@mui/material'
+
 const UserList = ({ users }) => {
-    // const [users, setUsers] = useState([])
-    // useEffect(() => {
-    //     userService.getAll().then(response =>
-    //         setUsers(response)
-    //     )
-    // }, [])
     return (
-        <div>
-            <h2>Users</h2>
-            {users.map(user => (
-                <li key={user.id}>
-                    <Link to={`/users/${user.id}`}>{user.name}</Link>
-                </li>
+        <TableContainer component={Paper} sx={{ mt: 4 }}>
+        <Typography variant="h5" sx={{ p: 2 }}>
+            Users
+        </Typography>
+        <Table>
+            <TableHead>
+            <TableRow>
+                <TableCell><strong>Name</strong></TableCell>
+                <TableCell align="right"><strong>Blogs Created</strong></TableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            {users.map((user) => (
+                <TableRow key={user.id}>
+                <TableCell>
+                    <Link
+                    to={`/users/${user.id}`}
+                    style={{ textDecoration: 'none', color: '#1976d2' }}
+                    >
+                    {user.name}
+                    </Link>
+                </TableCell>
+                <TableCell align="right">{user.blogs.length}</TableCell>
+                </TableRow>
             ))}
-        </div>
+            </TableBody>
+        </Table>
+        </TableContainer>
     )
 }
 

@@ -2,7 +2,7 @@
 1. Ex 7.0 - 7.6: routed-anecdotes
 2. Ex 7.7: country-hook
 3. Ex 7.8: ultimate-hooks
-4. Ex 7.9 - 7.13: BlogList App
+4. Ex 7.9 - 7.21: BlogList App
 
 ## Directories
 <pre>

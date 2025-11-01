@@ -1,35 +1,53 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Typography
+} from '@mui/material'
 
 const BlogList = () => {
     const blogs = useSelector(state => state.blogs)
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5,
-    }
-    return(
-        <div>
-            <h2>Blogs</h2>
-            {blogs.map(blog => (
-                <li key={blog.id} className='blog' style={blogStyle}>
-                    <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-                </li>
+
+    return (
+        <TableContainer component={Paper} sx={{ mt: 4 }}>
+        <Typography variant="h5" sx={{ p: 2 }}>
+            Blogs
+        </Typography>
+        <Table>
+            <TableHead>
+            <TableRow>
+                <TableCell><strong>Title</strong></TableCell>
+                <TableCell><strong>Author</strong></TableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            {blogs.map((blog) => (
+                <TableRow
+                key={blog.id}
+                hover
+                sx={{ cursor: 'pointer' }}
+                >
+                <TableCell>
+                    <Link
+                    to={`/blogs/${blog.id}`}
+                    style={{ textDecoration: 'none', color: '#1976d2' }}
+                    >
+                    {blog.title}
+                    </Link>
+                </TableCell>
+                <TableCell>{blog.author}</TableCell>
+                </TableRow>
             ))}
-            {/* {blogs.map(blog => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    addLikes={updateBlog}
-                    removeBlog={deleteBlog}
-                    userName={user.name}
-                />
-            ))} */}
-        </div>
+            </TableBody>
+        </Table>
+        </TableContainer>
     )
-    
 }
 
 export default BlogList

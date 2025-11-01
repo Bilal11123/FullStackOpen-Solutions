@@ -18,6 +18,8 @@ import UserList from './components/UserList'
 import userService from './services/users'
 import User from './components/User'
 
+import { Container, TextField, Button, Paper, Typography, Box } from '@mui/material'
+
 const App = () => {
     const dispatch = useDispatch()
     const blogs = useSelector(state => state.blogs)
@@ -61,29 +63,38 @@ const App = () => {
     }
 
     const loginForm = () => (
-        <form onSubmit={handleLogin}>
-            <div>
-                <label>
-                    username
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={({ target }) => setUsername(target.value)}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                    password
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={({ target }) => setPassword(target.value)}
-                    />
-                </label>
-            </div>
-            <button type="submit">login</button>
-        </form>
+        <Container maxWidth="xs" sx={{ mt: 8 }}>
+        <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+            <Typography variant="h5" component="h1" align="center" gutterBottom>
+            Login
+            </Typography>
+            <Box component="form" onSubmit={handleLogin}>
+            <TextField
+                fullWidth
+                margin="normal"
+                label="Username"
+                value={username}
+                onChange={({ target }) => setUsername(target.value)}
+            />
+            <TextField
+                fullWidth
+                margin="normal"
+                label="Password"
+                type="password"
+                value={password}
+                onChange={({ target }) => setPassword(target.value)}
+            />
+            <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                sx={{ mt: 2 }}
+            >
+                Login
+            </Button>
+            </Box>
+        </Paper>
+        </Container>
     )
 
     const blogMatch = useMatch('/blogs/:id')
@@ -107,6 +118,7 @@ const App = () => {
     }    
 
     return (
+        <Container>
         <div>
             <Menu />
             <h1>Blog app</h1>
@@ -119,6 +131,7 @@ const App = () => {
                 <Route path="/users/:id" element={<User user={userFound} />} />
             </Routes>
         </div>
+        </Container>
     )
 }
 

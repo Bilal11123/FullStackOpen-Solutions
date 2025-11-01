@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom'
 import { clearUser } from '../reducers/userReducer'
 import { useSelector, useDispatch } from 'react-redux'
+import {
+    AppBar,
+    Toolbar,
+    Button,
+    Typography,
+    Box
+} from '@mui/material'
 
 const Menu = () => {
     const dispatch = useDispatch()
@@ -15,13 +22,36 @@ const Menu = () => {
         window.localStorage.removeItem('loggedBlogappUser')
     }
     return (
-        <div className='menu'>
-            <Link style={padding} to="/users">users</Link>
-            <Link style={padding} to="/create">create</Link>
-            <Link style={padding} to="/">blogs</Link>
-            <span style={padding}>{user.name} logged in</span>
-            <button onClick={handleLogout}>Logout</button>
-        </div>
+    <AppBar position="static" color="primary">
+        <Toolbar>
+            <Box sx={{ flexGrow: 1 }}>
+            <Button color="inherit" component={Link} to="/users">
+                Users
+            </Button>
+            <Button color="inherit" component={Link} to="/create">
+                Create
+            </Button>
+            <Button color="inherit" component={Link} to="/">
+                Blogs
+            </Button>
+            </Box>
+            {user && (
+            <>
+                <Typography variant="body1" sx={{ mr: 2 }}>
+                    {user.name} logged in
+                </Typography>
+                <Button
+                    color="inherit"
+                    variant="outlined"
+                    onClick={handleLogout}
+                    sx={{ bgcolor: 'white', color: 'primary.main', borderColor: 'white' }}
+                >
+                    Logout
+                </Button>
+            </>
+            )}
+        </Toolbar>
+        </AppBar>
     )
 }
 
